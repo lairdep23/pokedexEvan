@@ -36,12 +36,42 @@ class PokemonDetailVC: UIViewController {
         super.viewDidLoad()
 
         nameLabel.text = pokemon.name
-        mainImage.image = UIImage(named: "\(pokemon.pokedexId)")
+        let image = UIImage(named: "\(pokemon.pokedexId)")
+        mainImage.image = image
+        currentEvoImage.image = image
+    
         
         pokemon.downloadPokemonDetails { () -> () in
             //this will be called after download is done
+            self.updateUI()
         }
     }
+    
+    func updateUI() {
+        descriptionLabel.text = pokemon.description
+        typeLabel.text = pokemon.type
+        defenseLabel.text = pokemon.defense
+        heightLabel.text = pokemon.height
+        weightLabel.text = pokemon.weight
+        pokedexLabel.text = "\(pokemon.pokedexId)"
+        baseAttackLabel.text = pokemon.baseAttack
+        
+        if pokemon.nextEvolutionId == "" {
+            evoLabel.text = "No Evolutions"
+            nextEvoImage.hidden = true
+        } else {
+            nextEvoImage.hidden = false
+            nextEvoImage.image = UIImage(named: pokemon.nextEvolutionId)
+            var str = "Next Evolution: \(pokemon.nextEvolutionText)"
+            
+            if pokemon.nextEvolutionLevel != "" {
+                str += " - LVL \(pokemon.nextEvolutionLevel)"
+                evoLabel.text = str 
+        }
+            
+        
+        }
+        }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -51,4 +81,4 @@ class PokemonDetailVC: UIViewController {
     @IBAction func backButtonPressed(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: nil)
     }
-}
+    }
